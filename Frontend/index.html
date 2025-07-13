@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Breast Cancer Predictor</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Initial Welcome Screen -->
+  <div id="initialScreen" class="initial-screen">
+    <img src="images/Butterfly initial screen.jpg" alt="Welcome" class="initial-bg">
+    <button id="continueButton" class="continue-btn">Continue</button>
+  </div>
+
+  <!-- Main App Screen -->
+  <div id="mainScreen" class="main-screen">
+    <header class="page-header">
+      <div class="logo-container">
+        <img src="images/left-logo.png" alt="Left Logo" class="logo">
+      </div>
+      <h1 class="page-title">Breast Cancer Predictor</h1>
+      <img src="images/right-logo.png" alt="Right Logo" class="logo">
+    </header>
+
+    <div id="hamburgerIcon" class="hamburger-icon">☰</div>
+
+    <div id="hamburgerMenu" class="hamburger-menu">
+      <span id="closeMenu" class="close-menu">&times;</span>
+      <ul>
+        <li><a href="#" id="aboutLink">About</a></li>
+        <li><a href="#" id="symptomsLink">Symptoms</a></li>
+        <li><a href="#" id="contactLink">Contact Us</a></li>
+        <li><a href="#" id="faqLink">FAQ</a></li>
+        <li><a href="#" id="privacyLink">Privacy Policy</a></li>
+      </ul>
+    </div>
+
+    <div id="contentModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+
+    <main class="main-container">
+      <div class="flex-wrapper">
+        <div class="upload-section">
+          <form id="uploadForm">
+            <h2>Upload Image</h2>
+            <input id="imageInput" type="file" accept="image/*" />
+            <h2>Preview</h2>
+            <img id="preview" src="" class="image-preview" style="display: none;" />
+            <button class="submit-btn" type="submit">Submit</button>
+          </form>
+        </div>
+
+        <div class="result-section">
+          <h2 id="pred-head" style="display: none;">Prediction Results</h2>
+          <p id="predictionResult" style="display: none;"></p>
+          <p id="confidenceResult" style="display: none;"></p>
+          <h2>Classified Image</h2>
+          <img id="contouredImage" class="image-preview" style="display: none;" />
+          <button id="showReportButton" class="submit-btn" style="display: none;">Show Report</button>
+          <div id="reportSection" style="display: none;">
+            <h3>Model Report:</h3>
+            <p id="modelReport"></p>
+            <h4>Radiologist Notes:</h4>
+            <textarea id="radiologistNotes" rows="4" cols="50" placeholder="Enter your notes here..."></textarea>
+          </div>
+          <button id="downloadReportButton" class="submit-btn" style="display: none;">Download Report</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+<script>
+  // Initial screen control
+  const initialScreen = document.getElementById("initialScreen");
+  const mainScreen = document.getElementById("mainScreen");
+  const continueButton = document.getElementById("continueButton");
+
+  continueButton.addEventListener("click", () => {
+    initialScreen.style.display = "none";
+    mainScreen.style.display = "block";
+    sessionStorage.setItem("entered", "true");
+  });
+
+  window.onload = () => {
+    if (sessionStorage.getItem("entered")) {
+      initialScreen.style.display = "none";
+      mainScreen.style.display = "block";
+    }
+  };
+
+  // Existing full JS functionality
+  const imageInput = document.getElementById("imageInput");
+  const preview = document.getElementById("preview");
+  const uploadForm = document.getElementById("uploadForm");
+  const predictionResult = document.getElementById("predictionResult");
+  //const confidenceResult = document.getElementById("confidenceResult");
+  const predHead = document.getElementById("pred-head");
+  const contouredImage = document.getElementById("contouredImage");
+  const showReportButton = document.getElementById("showReportButton");
+  const reportSection = document.getElementById("reportSection");
+  const modelReport = document.getElementById("modelReport");
+  const radiologistNotes = document.getElementById("radiologistNotes");
+  const downloadReportButton = document.getElementById("downloadReportButton");
+
+  const hamburgerIcon = document.getElementById("hamburgerIcon");
+  const hamburgerMenu = document.getElementById("hamburgerMenu");
+  const closeMenu = document.getElementById("closeMenu");
+  const symptomsLink = document.getElementById("symptomsLink");
+  const aboutLink = document.getElementById("aboutLink");
+  const contactLink = document.getElementById("contactLink");
+  const faqLink = document.getElementById("faqLink");
+  const privacyLink = document.getElementById("privacyLink");
+  const contentModal = document.getElementById("contentModal");
+  const closeModal = document.getElementById("closeModal");
+  const modalContent = document.getElementById("modalContent");
+
+  hamburgerIcon.onclick = () => hamburgerMenu.classList.toggle("show");
+  closeMenu.onclick = () => hamburgerMenu.classList.remove("show");
+  closeModal.onclick = () => contentModal.style.display = "none";
+
+  const showModal = (html) => {
+    modalContent.innerHTML = html;
+    contentModal.style.display = "block";
+  };
+
+  symptomsLink.onclick = e => {
+    e.preventDefault();
+    showModal(`<h2>Symptoms</h2><ul><li><strong>Lump in the breast or underarm</strong>: A new lump or mass in the breast or underarm is the most common symptom of breast cancer.</li>
+          <li><strong>Change in size, shape, or appearance of the breast</strong>: This could involve a change in the contour of the breast or its size.</li>
+          <li><strong>Unexplained pain in the breast or nipple</strong>: Pain that doesn't go away, especially if it occurs with other symptoms.</li>
+          <li><strong>Nipple discharge other than breast milk</strong>: This could include blood or a clear discharge.</li>
+          <li><strong>Skin changes on the breast, such as redness or dimpling</strong>: The skin of the breast may become thickened, red, or dimpled (like the skin of an orange).</li></ul>`);
+  };
+  aboutLink.onclick = e => {
+    e.preventDefault();
+    showModal(`<h2>About</h2><p>This app is a breast cancer detection tool designed to assist radiologists by providing an additional layer of confirmation and analysis to ensure accurate diagnoses. It uses a trained model to predict whether a mammogram image is benign or malignant. This app is here to help radiologists make more informed decisions and enhance their workflow.</p>`);
+  };
+  contactLink.onclick = e => {
+    e.preventDefault();
+    showModal(`<h2>Contact</h2><p>If you have any questions or need assistance, feel free to reach out to us at Email: support@breastcancerapp.com </p>`);
+  };
+  faqLink.onclick = e => {
+    e.preventDefault();
+    showModal(`<h2>FAQ</h2>
+        <p><strong>Q:</strong> What type of images can be uploaded?</p>
+        <p><strong>A:</strong> You can upload standard mammogram images (either in JPG, PNG, or JPEG format).</p>
+        <p><strong>Q:</strong> How accurate is the model?</p>
+        <p><strong>A:</strong> The model is approximately 70% accurate, but it's designed to assist radiologists in making more informed decisions.</p>
+      `);
+  };
+  privacyLink.onclick = e => {
+    e.preventDefault();
+    showModal(`<h2>Privacy Policy</h2><p>Your data is handled with the utmost care and stored securely. Only the radiologists who use this app will have access to the images and associated data. We are committed to protecting your privacy and confidentiality.</p>`);
+  };
+
+  imageInput.onchange = function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.src = e.target.result;
+        preview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  uploadForm.onsubmit = async function (event) {
+    event.preventDefault();
+    const file = imageInput.files[0];
+    if (!file) return alert("Please select an image.");
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch("http://localhost:5000/predict", {
+        method: "POST", body: formData
+      });
+      const result = await res.json();
+      if (result.error) return alert(result.error);
+
+      predictionResult.textContent = `Prediction: ${result.prediction}`;
+      //confidenceResult.textContent = `Confidence: ${result.confidence}`;
+      predHead.style.display = "block";
+      predictionResult.style.display = "block";
+      //confidenceResult.style.display = "block";
+
+      contouredImage.src = result.contoured_image_url;
+      contouredImage.style.display = "block";
+
+      showReportButton.style.display = "inline-block";
+      downloadReportButton.style.display = "inline-block";
+
+      showReportButton.onclick = () => {
+        modelReport.textContent = `This model predicts that the image is ${result.prediction}.This is an AI-based prediction. Mistakes are possible, so please verify with expert medical judgment.`;
+        reportSection.style.display = "block";
+      };
+
+    } catch (err) {
+      console.error(err);
+      alert("Upload failed");
+    }
+  };
+
+  downloadReportButton.onclick = () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Breast Cancer Prediction Report", 20, 20);
+    doc.setFontSize(12);
+    doc.text(predictionResult.textContent, 20, 30);
+    doc.text(confidenceResult.textContent, 20, 40);
+    doc.text(`Radiologist Notes: ${radiologistNotes.value}`, 20, 50);
+    doc.addImage(contouredImage.src, 'JPEG', 20, 60, 180, 100);
+    doc.save("Breast_Cancer_Report.pdf");
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+/* Initial Welcome Screen */
+.initial-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.initial-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.continue-btn {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #d63384;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.continue-btn:hover {
+  background-color: #c2185b;
+}
+
+/* Main App Background */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.main-screen {
+  background-image: url('images/main background.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+
+.page-header {
+  background-color: #ffe6f0;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #ffc0cb;
+}
+
+.page-title {
+  color: #d63384;
+  font-size: 28px;
+  text-align: center;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.logo {
+  width: 50px;
+  height: auto;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hamburger-icon {
+  color: #d63384;
+  font-size: 30px;
+  cursor: pointer;
+  margin: 10px;
+  position: absolute;
+  top: 70px;
+  left: 20px;
+}
+
+.hamburger-menu {
+  display: none;
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  width: 200px;
+  z-index: 1000;
+}
+
+.hamburger-menu.show {
+  display: block;
+}
+
+.hamburger-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.hamburger-menu li {
+  padding: 10px;
+}
+
+.hamburger-menu a {
+  color: #d63384;
+  text-decoration: none;
+}
+
+.hamburger-menu a:hover {
+  font-weight: bold;
+}
+
+.main-container {
+  padding: 40px;
+}
+
+.flex-wrapper {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.upload-section, .result-section {
+  flex: 1 1 45%;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #ffc0cb;
+}
+
+.image-preview {
+  max-width: 100%;
+  height: auto;
+  margin-top: 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.submit-btn {
+  background-color: #d63384;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.submit-btn:hover {
+  background-color: #c2185b;
+}
+
+/* Pink color for section titles */
+.upload-section h2,
+.result-section h2,
+#pred-head {
+  color: #d63384;
+  font-weight: bold;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100%; width: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 10000;
+}
+
+.modal-content {
+  background: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+}
+
+.close {
+  color: #d63384;
+  font-size: 30px;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  cursor: pointer;
+}
